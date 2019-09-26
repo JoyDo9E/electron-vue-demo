@@ -1,6 +1,22 @@
 'use strict'
 
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow } from 'electron'
+
+/**
+ * --arch是指定系统是什么架构的:
+ * ia32， 即--arch=ia32， 32位操作系统，也可以在64位操作系统中安装
+ * x64， 即--arch=x64， 64位操作系统，使用本架构打包无法再32位操作系统中安装
+ * armv7l， 即--arch=armv7l， 使用比较少
+ * arm64， 即--arch=arm64， 使用比较少
+
+ * --platform是配置打包成什么平台的安装文件:
+ * win系统： win或者win32，即--platform=win或者--platform=win32
+ * mac系统：mac或者darwin，即--platform=mac或者--platform=darwin
+ * Linux系统：linux， 即--platform=linux
+ * 所有平台：all， 即--platform=all
+
+ * 新的写法如下：electron-builder --win --x64
+ */
 
 /**
  * Set `__static` path to static files in production
@@ -16,19 +32,21 @@ const winURL = process.env.NODE_ENV === 'development'
   : `file://${__dirname}/index.html`
 
 function createWindow () {
-
-  /* 隐藏electron创听的菜单栏 */
-  Menu.setApplicationMenu(null)
-
   /**
    * Initial window options
    */
   mainWindow = new BrowserWindow({
     height: 600,
-    useContentSize: true,
+    // useContentSize: true,
     width: 1000,
-    backgroundColor: '#2e2c29'
+    // backgroundColor: '#2e2c29',
+    // transparent: true,
+    frame: false
+    // titleBarStyle: 'hidden',
+    // autoHideMenuBar: true
   })
+
+  // mainWindow.setMenu(null)
 
   mainWindow.loadURL(winURL)
 
