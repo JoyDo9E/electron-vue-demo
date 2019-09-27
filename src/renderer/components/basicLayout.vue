@@ -1,16 +1,16 @@
 <template>
-    <div class="app-container default-style">
-        <div class="toolbar-wrapper" style="-webkit-app-region: drag">
+    <div :class="skinIndex ? 'app-container theme-style' : 'app-container default-style'">
+        <div class="toolbar-wrapper baseic-transition-style" style="-webkit-app-region: drag">
             <div class="app-logo">这是logo</div>
             <div class="btns-wrapper" style="-webkit-app-region: no-drag">
-                <div class="nr-svg skin-btn"></div>
-                <div class="nr-svg minimize-btn"></div>
-                <div class="nr-svg maximize-btn"></div>
-                <div class="nr-svg close-btn"></div>
+                <div class="nr-svg skin-btn" @click="checkoutSkin"></div>
+                <div class="nr-svg minimize-btn" @click="handleOperation('min')"></div>
+                <div :class="isMaximize ? 'nr-svg recovery-btn' : 'nr-svg maximize-btn'" @click="handleOperation('max')"></div>
+                <div class="nr-svg close-btn" @click="handleOperation('close')"></div>
             </div>
         </div>
-        <div class="content-container">
-            <div class="menubar-wrapper">
+        <div class="content-container baseic-transition-style">
+            <div class="menubar-wrapper baseic-transition-style">
                 <div class="checkout-btn" @click="checkoutMenubarStatus">
                     <i :class='isCollapse ? "el-icon-s-unfold" : "el-icon-s-fold"'></i>
                 </div>
@@ -55,11 +55,14 @@
 </template>
 
 <script>
+  const {ipcRenderer} = require('electron')
   export default {
     name: 'basicLayout',
     data () {
       return {
-        isCollapse: true
+        isCollapse: true,
+        skinIndex: true,
+        isMaximize: false
       }
     },
     methods: {
@@ -71,6 +74,13 @@
       },
       checkoutMenubarStatus () {
         this.isCollapse = !this.isCollapse
+      },
+      checkoutSkin () {
+        this.skinIndex = !this.skinIndex
+      },
+      handleOperation (type) {
+        type === 'max' && (this.isMaximize = !this.isMaximize)
+        ipcRenderer.send(type)
       }
     }
   }
@@ -111,6 +121,7 @@
                 align-items: center;
                 &>div{
                     color: #eee;
+                    cursor: pointer;
                 }
                 .maximize-btn{
                     background: url("../assets/img/maximize.svg") no-repeat center / contain;
@@ -133,11 +144,22 @@
             .menubar-wrapper{
                 width: fit-content;
                 height: calc(100vh - 80px);
-                overflow: auto;
+                position: relative;
+                .el-menu{
+                    border: none;
+                }
                 .checkout-btn{
                     width: 30px;
                     height: 30px;
                     cursor: pointer;
+                    position: absolute;
+                    top: 0;
+                    right: -40px;
+                    &>i{
+                        font-size: 20px;
+                        line-height: 30px;
+                        text-align: center;
+                    }
                 }
             }
             .content-wrapper{

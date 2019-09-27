@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 /**
  * --arch是指定系统是什么架构的:
@@ -41,7 +41,8 @@ function createWindow () {
     width: 1000,
     // backgroundColor: '#2e2c29',
     // transparent: true,
-    frame: false
+    frame: false,
+    show: false
     // titleBarStyle: 'hidden',
     // autoHideMenuBar: true
   })
@@ -50,10 +51,26 @@ function createWindow () {
 
   mainWindow.loadURL(winURL)
 
+  // 在加载页面时，渲染进程第一次完成绘制时，会发出 ready-to-show 事件, 在此事件后显示窗口将没有视觉闪烁
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
+  })
+
   mainWindow.on('closed', () => {
     mainWindow = null
   })
 }
+
+// 监听最小化/最大化/复原/关闭事件
+ipcMain.on('min', () => mainWindow.minimize())
+ipcMain.on('max', () => {
+  if (mainWindow.isMaximized()) {
+    mainWindow.unmaximize()
+  } else {
+    mainWindow.maximize()
+  }
+})
+ipcMain.on('close', () => mainWindow.close())
 
 app.on('ready', createWindow)
 

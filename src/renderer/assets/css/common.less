@@ -32,16 +32,28 @@ body{
     }
     .content-container{
         background: #333;
+        .menubar-wrapper{
+            background: #777;
+            .el-menu{
+                background: transparent;
+            }
+        }
     }
 }
 .theme-style{
-    color: #000;
+    color: #999;
     font-size: 14px;
     .toolbar-wrapper{
         background: #ff6000;
     }
     .content-container{
         background: #eee;
+        .menubar-wrapper{
+            background: #777;
+            .el-menu{
+                background: transparent;
+            }
+        }
     }
 }
 .nr-svg {
@@ -49,4 +61,7 @@ body{
     height: 1em;
     fill: currentColor;
     box-sizing: content-box !important;
+}
+.baseic-transition-style{
+    transition: background 0.2s ease-out;
 }
