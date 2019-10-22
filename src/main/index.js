@@ -1,6 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow, ipcMain } from 'electron'
+import { updateHandle } from '../renderer/utils/update'
 
 /**
  * --arch是指定系统是什么架构的:
@@ -59,6 +60,12 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+  // 设置版本更新地址，即将打包后的latest.yml文件和exe文件同时放在（无异常情况下的打包后会出现一个latest.yml文件）
+  // http://xxxx/test/version/对应的服务器目录下,该地址和package.json的publish中的url保持一致
+  // todo 设置文件下载路径（建议直接express静态托管，用作测试）
+  let feedUrl = 'http://xxxx/test/version/'
+  // 检测版本更新
+  updateHandle(mainWindow, feedUrl)
 }
 
 // 监听最小化/最大化/复原/关闭事件

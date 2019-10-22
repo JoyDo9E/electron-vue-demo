@@ -31,6 +31,12 @@
     "files": [
       "dist/electron/**/*"
     ],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://10.0.1.42:88/ todo set customized settings"
+      }
+    ],
     "dmg": {
       "contents": [
         {
@@ -47,7 +53,8 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "build/icons/icon.icns",
+      "identity": null
     },
     "win": {
       "icon": "build/icons/icon.ico",
@@ -75,6 +82,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "electron-updater": "^4.1.2",
     "element-ui": "^2.12.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
